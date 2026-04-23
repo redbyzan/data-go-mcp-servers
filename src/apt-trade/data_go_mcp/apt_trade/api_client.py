@@ -67,7 +67,9 @@ class AptTradeAPIClient:
             if "response" in data:
                 resp = data["response"]
                 header = resp.get("header", {})
-                if header.get("resultCode") != "00":
+                # 공공데이터포털 실거래가 API: 성공 시 "00" 또는 "000"
+                code = header.get("resultCode", "")
+                if code not in ("00", "000"):
                     raise Exception(
                         f"API Error: {header.get('resultMsg', 'Unknown error')} "
                         f"(code: {header.get('resultCode')})"

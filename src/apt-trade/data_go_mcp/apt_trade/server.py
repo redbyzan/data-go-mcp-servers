@@ -193,12 +193,12 @@ async def estimate_apt_price(
             # 단지명 필터링
             matched = []
             for item in result["items"]:
-                name = item.get("apt_nm") or item.get("아파트") or ""
+                name = item.get("apt_nm") or ""
                 if apt_nm in name or name in apt_nm:
                     # 전용면적 필터링 (±2㎡)
                     if excl_use_area is not None:
                         try:
-                            area = float(item.get("excl_use_area") or item.get("전용면적") or "0")
+                            area = float(item.get("excl_use_ar") or 0)
                             if abs(area - excl_use_area) > 2.0:
                                 continue
                         except (ValueError, TypeError):
@@ -216,7 +216,7 @@ async def estimate_apt_price(
             # 거래금액 파싱 및 통계
             prices = []
             for item in matched:
-                amt_str = item.get("deal_amount") or item.get("거래금액") or ""
+                amt_str = item.get("deal_amount") or ""
                 amt = _parse_deal_amount(amt_str)
                 if amt and amt > 0:
                     prices.append(amt)
